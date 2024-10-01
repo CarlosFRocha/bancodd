@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESTOQUE</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<!--CÓDIGO RESGISTRADO.
+© [2024] por [Carlos de Freitas Rocha]. Todos os direitos reservados.-->
+<style>
+    body{background-color: rgb(171, 170, 187);}
+    h1{font-family: Verdana; text-align: center; font-size: 35px; background-color: rgb(43, 255, 0)}
+    ul{font-family: Verdana; font-size: 20px; font-weight: 600; color: rgb(8, 8, 70); background-color: white;}
+    label{font-family: Verdana; font-size: 30px; font-weight: 700; color: rgb(1, 1, 121)}
+    input{padding: 6px; border-radius: 10px; text-align: center; font-size: 20px; font-weight: 600;}
+    button{padding: 10px; color: white; font-size: larger; border-radius: 20px; cursor: pointer;}
+    a{font-family: Verdana; margin-left: 0%; font-size: 20px; font-weight: 700; color: red;}
+    marquee{font-family: Verdana; font-size: 60px; font-weight: 600; box-shadow: 20px 20px 30px rgb(1, 10, 1), -20px -20px 30px white;}
+    b{margin-left: 82%; color: white;}
+</style>
+
+<body>
+    <marquee behavior="alternate" direction="">MINHA LOJA</marquee>
+    <b>Criado por: Carlos Web Designer.</b>
+    <h1>ESTOQUE</h1>
+    <a href="index.html">VOLTAR</a><br><br>
+    <label>Produto:
+    <input type="text" id="item"></label>
+    <label>Quantidade:
+    <input type="number" id="quantidade" min="0" max="100"></label>
+    <label>Valor:
+    <input type="number" id="valor" min="0" max="100"></label><br><br>
+    <button style="background-color: rgb(7, 190, 7);" onclick="adicionarItem()">Adicionar</button>
+    <button style="background-color: red;" onclick="removerItem()">Remover</button>
+    <button style="background-color: blue;" onclick="salvarEstoque()">Salvar</button>
+    <button style="background-color: rgb(194, 194, 13);" onclick="editarItem()">Editar</button>
+    <button style="background-color: rgb(3, 182, 107);" onclick="pesquisarItem()">Pesquisar</button><br><br><br>
+    <button class="btn-imp" style="background-color: rgb(44, 42, 42)" onclick="imprimirLista()">Imprimir Lista</button>
+    <ul id="estoque"></ul>
+    <script>
+
+        function adicionarItem() {
+            const item = document.getElementById('item').value;
+            const quantidade = document.getElementById('quantidade').value;
+            const valor = document.getElementById('valor').value;
+            document.getElementById('estoque').innerHTML += `<li>${item}:  QT = ${quantidade} cx - Valor: R$  ${valor} </li>`;}
+        
+         function imprimirLista() {
+        const lista = document.getElementById('estoque').innerHTML;
+        const janelaImprimir = window.open('', '', 'width=800,height=600');
+        janelaImprimir.document.write('<html><head><title>Lista de Estoque</title></head><body>');
+        janelaImprimir.document.write('<h1>Lista de Estoque</h1>');
+        janelaImprimir.document.write('<ul>' + lista + '</ul>');
+        janelaImprimir.document.write('</body></html>');
+        janelaImprimir.document.close();
+        janelaImprimir.print();}
+
+        function removerItem() {
+            const item = document.getElementById('item').value;
+            const estoque = document.getElementById('estoque');
+            const itemToRemove = Array.from(estoque.children).find(li => li.textContent.includes(item));
+            estoque.removeChild(itemToRemove); }
+
+        function editarItem() {
+            const item = document.getElementById('item').value;
+            const quantidade = document.getElementById('quantidade').value;
+            const valor = document.getElementById('valor').value;
+            const estoque = document.getElementById('estoque');
+            const itemToEdit = Array.from(estoque.children).find(li => li.textContent.includes(item));
+            itemToEdit.textContent = `${item}:  QT = ${quantidade} cx - Valor: R$  ${valor}`;}
+
+        function salvarEstoque() {
+            const estoque = document.getElementById('estoque').innerHTML;
+            localStorage.setItem('meuEstoque', estoque);}
+
+        function pesquisarItem() {
+    const item = document.getElementById('item').value;
+    const estoque = document.getElementById('estoque');
+    const itemEncontrado = Array.from(estoque.children).find(li => li.textContent.includes(item));
+    if (itemEncontrado) { Swal.fire(` ${itemEncontrado.textContent}`); }
+    else { Swal.fire(`Item não encontrado: ${item}`);}}
+
+        window.onload = function() {
+            const estoqueSalvo = localStorage.getItem('meuEstoque');
+            if (estoqueSalvo) {
+                document.getElementById('estoque').innerHTML = estoqueSalvo; }}
+    </script>
+</body>
+</html>

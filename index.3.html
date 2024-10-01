@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CADASTRO DE CLIENTE</title>
+</head>
+<!--CÓDIGO RESGISTRADO.
+© [2024] por [Carlos de Freitas Rocha]. Todos os direitos reservados.-->
+<style>
+    body{background-color: rgb(171, 170, 187);}
+    .Into{font-family: Verdana;color: rgb(0, 0, 0); text-align: center; background-color: rgb(43, 255, 0); font-size: 35px;}
+    h3{font-family: Verdana; font-size: 22px; color: rgb(0, 0, 155);}
+    button{margin-left: 45%; padding: 10px; border-radius: 10px; font-size: 20px; color: white; cursor: pointer;}
+    ul{font-family: Verdana; font-weight: 600; color: rgb(3, 3, 150); padding: 5px; background-color: white;}
+    input{padding: 6px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: 600;}
+    form{font-family: Verdana; font-weight: 600;}
+    form textarea{font-family: Verdana; font-size: 15px; padding: 10px; font-weight: 600;}
+    a{font-family: Verdana; margin-left: 1%; font-size: 20px; font-weight: 700; color: red;}
+    .btn-imp{margin-left: 0%; width: 20%; background-color: blue;}
+    marquee{font-family: Verdana; font-size: 60px; font-weight: 600; box-shadow: 20px 20px 30px rgb(1, 10, 1), -20px -20px 30px white;}
+    button{border-radius: 20px;}
+    b{margin-left: 82%; color: white;}
+    .b1{font-size: 20px; color: rgb(0, 0, 0);}
+</style>
+<body>
+    <marquee behavior="alternate" direction="">MINHA LOJA</marquee>
+    <b>Criado por: Carlos Web Designer.</b>
+    <h1 class="Into">INFORMAÇÕES E DADOS DO CLIENTE</h1>
+    <a href="index.html">VOLTAR</a><br>
+    <h3>Pesquise por nome:</h3><input type="text" id="searchInput" placeholder="Pesquisar nomes..."><br><br>
+    <form>
+        <label for="observacao"><b1 class="b1">PAGAMENTO PARCIAL:</b1></label><br>
+        <textarea id="observacao" name="observacao" rows="4" cols="60"></textarea><br><br>
+        <button class="btn-imp" onclick="imprimirLista()">Imprimir Dados do Cliente</button>
+    </form>
+    <ul id="nameList">
+    <ul id="Cliente"></ul>
+    <script>
+        function salvarFuncionario() {
+            const nome = document.getElementById('nome').value;
+            const CPF = document.getElementById('CPF').value;
+            const tel = document.getElementById('tel').value;
+            const rua = document.getElementById('rua').value;
+            const bairro = document.getElementById('bairro').value;
+            const Nu = document.getElementById('Nu').value;
+            const Des = document.getElementById('Des').value;
+            const Var = document.getElementById('Var').value;
+            const Var1 = document.getElementById('Var1').value;
+            const Data1 = document.getElementById('Data1').value;
+            const Data2 = document.getElementById('Data2').value;
+            const funcionario = { nome, CPF, tel, rua, bairro, Nu, Des, Var, Var1, Data1, Data2 };
+            const Cliente = JSON.parse(localStorage.getItem('funcionarios')) || [];
+            Cliente.push(funcionario);
+            localStorage.setItem('funcionarios', JSON.stringify(Cliente));
+            exibirFuncionarios();}
+
+        function imprimirLista() {
+        const lista = document.getElementById('Cliente').innerHTML;
+        const janelaImprimir = window.open('', '', 'width=1000,height=800');
+        janelaImprimir.document.write('<html><head><title>Cliente</title></head><body>');
+        janelaImprimir.document.write('<h4>Cliente</h4>');
+        janelaImprimir.document.write('<ul>' + lista + '</ul>');
+        janelaImprimir.document.write('</body></html>');
+        janelaImprimir.document.close();
+        janelaImprimir.print();}
+
+        function removerPorNome() {
+            const nome = document.getElementById('nome').value;
+            let Cliente = JSON.parse(localStorage.getItem('funcionarios')) || [];
+            Cliente = Cliente.filter(funcionario => funcionario.nome !== nome);
+            localStorage.setItem('funcionarios', JSON.stringify(Cliente));
+            exibirFuncionarios(); }
+
+        function exibirFuncionarios() {
+            const funcionarios = JSON.parse(localStorage.getItem('funcionarios')) || [];
+            const Cliente = document.getElementById('Cliente');
+            Cliente.innerHTML = '';
+            funcionarios.forEach(funcionario => {
+                const funcionarioElement = document.createElement('h4');
+                funcionarioElement.textContent = `Nome: ${funcionario.nome} / CPF: ${funcionario.CPF} / Telefone: ${funcionario.tel} /  Rua: ${funcionario.rua}
+                / Bairro: ${funcionario.bairro} / Nº: ${funcionario.Nu} / Descrição: ${funcionario.Des}
+                / Valor total: R$ ${funcionario.Var} / Valor da Entrada: R$ ${funcionario.Var1} / Data da compra: ${funcionario.Data1} / Data de vencimento: ${funcionario.Data2}. ASS:___________________________________________________________________________________________________________________
+                Agradecemos a preferencia. Minha Loja - CNPJ: 00.000.000/0001-00 - (não vale como nota fiscal).`;
+                Cliente.appendChild(funcionarioElement);
+            });
+            Array.from(Cliente.getElementsByTagName('h4'))
+                .sort((a, b) => a.textContent.localeCompare(b.textContent))
+                .forEach(li => Cliente.appendChild(li));
+            clientForm.reset();}
+            
+            document.addEventListener('DOMContentLoaded', function() {
+            Array.from(Cliente.getElementsByTagName('h4'))
+                .sort((a, b) => a.textContent.localeCompare(b.textContent))
+                .forEach(h4 => Cliente.appendChild(h4));});
+        window.onload = exibirFuncionarios;
+        
+        const searchInput = document.getElementById('searchInput');
+        const nameList = document.getElementById('nameList');
+        searchInput.addEventListener('input', function() {
+            const searchValue = searchInput.value.toLowerCase();
+            const names = nameList.getElementsByTagName('h4');
+            Array.from(names).forEach(function(name) {
+                const nameText = name.textContent.toLowerCase();
+                if (nameText.includes(searchValue)) {name.style.display = 'block';} 
+                else { name.style.display = 'none';} });});
+        document.addEventListener('DOMContentLoaded', function() {
+            const observacaoInput = document.getElementById('observacao');
+            observacaoInput.value = localStorage.getItem('observacao') || '';
+            observacaoInput.addEventListener('input', function() {
+                localStorage.setItem('observacao', observacaoInput.value);});});
+    </script>
+</body>
+</html>

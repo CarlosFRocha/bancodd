@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CADASTRO DE CLIENTE</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<!--CÓDIGO RESGISTRADO.
+© [2024] por [Carlos de Freitas Rocha]. Todos os direitos reservados.-->
+<style>
+    body{background-color: rgb(171, 170, 187);}
+    .Into{font-family: Verdana;color: rgb(0, 0, 0); text-align: center; background-color: rgb(43, 255, 0); font-size: 35px;}
+    h3{font-family: Verdana; font-size: 17px;}
+    .Cabe{font-family: Verdana; text-align: center; font-weight: bolder; color: rgb(1, 1, 121); font-size: 25px;}
+    button{margin-left: 45%; padding: 10px; border-radius: 10px; font-size: 20px; color: white; cursor: pointer;}
+    ul{font-family: Verdana; font-weight: 600; color: rgb(3, 3, 150); padding: 5px; background-color: white;}
+    input{padding: 6px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: 600;}
+    form{font-family: Verdana; font-weight: 600;}
+    form textarea{font-family: Verdana; font-size: 15px; padding: 10px; font-weight: 600;}
+    table{margin-left: 20%;}
+    a{font-family: Verdana; margin-left: 68%; font-size: 20px; font-weight: 700; color: red;}
+    .a1{font-family: Verdana; margin-left: 1%; font-size: 20px; font-weight: 700; color: red;}
+    img{width: 20%;}
+    .btn-imp{margin-left: 0%; width: 20%; background-color: blue;}
+    marquee{font-family: Verdana; font-size: 60px; font-weight: 600; box-shadow: 20px 20px 30px rgb(1, 10, 1), -20px -20px 30px white;}
+    b{margin-left: 82%; color: white;}
+</style>
+<body>
+    <marquee behavior="alternate" direction="">MINHA LOJA</marquee>
+    <b>Criado por: Carlos Web Designer.</b>
+    <h1 class="Into">INFORMAÇÕES DO CLIENTE</h1>
+    <a class="a1" href="index.3.html">DADOS DO CLIENTE</a>
+    <a href="index.2.html">MEU ESTOQUE</a><br><br>
+    <div class="Cabe"> Nome:<input size="30" type="text" id="nome" >
+    CPF:<input size="12" type="text" id="CPF">
+    Telefone:<input size="12" type="tel" id="tel" ><br><br>
+    Rua:<input type="text" id="rua" >
+    Bairro:<input type="text" id="bairro">
+    Nº:<input type="text" size="3" id="Nu"><br><br>
+    <h1 class="Into">DADOS DA COMPRA</h1>
+    Descrição do Produto:<input size="30" type="text" id="Des">
+    Valor Total:<input type="number" min="1" max="1000" id="Var">
+    Valor da Entrada:<input type="number" min="1" max="1000" id="Var1"><br><br>
+    Data da Compra:<input size="12" type="text" id="Data1">
+    Data do Vencimento:<input size="12" type="text" id="Data2"></div><br>
+    <button style="background-color: rgb(7, 177, 7); margin-left: 36%;" onclick="salvarFuncionario()">Adicionar Cliente</button>
+    <button style="background-color: red;margin-left: 1%;" onclick="removerPorNome()">Remover Cliente</button>
+    <!--alert("Adicionado com sucesso!");-->
+    <script>
+        function salvarFuncionario() {
+            const nome = document.getElementById('nome').value;
+            const CPF = document.getElementById('CPF').value;
+            const tel = document.getElementById('tel').value;
+            const rua = document.getElementById('rua').value;
+            const bairro = document.getElementById('bairro').value;
+            const Nu = document.getElementById('Nu').value;
+            const Des = document.getElementById('Des').value;
+            const Var = document.getElementById('Var').value;
+            const Var1 = document.getElementById('Var1').value;
+            const Data1 = document.getElementById('Data1').value;
+            const Data2 = document.getElementById('Data2').value;
+            const funcionario = { nome, CPF, tel, rua, bairro, Nu, Des, Var, Var1, Data1, Data2 };
+            const Cliente = JSON.parse(localStorage.getItem('funcionarios')) || [];
+            Cliente.push(funcionario);
+            Swal.fire('Adicionado com sucesso!');
+            localStorage.setItem('funcionarios', JSON.stringify(Cliente));
+            exibirFuncionarios();}
+
+        function imprimirLista() {
+        const lista = document.getElementById('Cliente').innerHTML;
+        const janelaImprimir = window.open('', '', 'width=1000,height=800');
+        janelaImprimir.document.write('<html><head><title>Cliente</title></head><body>');
+        janelaImprimir.document.write('<h4>Cliente</h4>');
+        janelaImprimir.document.write('<ul>' + lista + '</ul>');
+        janelaImprimir.document.write('</body></html>');
+        janelaImprimir.document.close();
+        janelaImprimir.print();}
+
+        function removerPorNome() {
+            const nome = document.getElementById('nome').value;
+            Swal.fire('Cliente Removido!');  
+            let Cliente = JSON.parse(localStorage.getItem('funcionarios')) || [];
+            Cliente = Cliente.filter(funcionario => funcionario.nome !== nome);
+            localStorage.setItem('funcionarios', JSON.stringify(Cliente));
+            exibirFuncionarios(); }
+
+        function exibirFuncionarios() {
+            const funcionarios = JSON.parse(localStorage.getItem('funcionarios')) || [];
+            const Cliente = document.getElementById('Cliente');
+            Cliente.innerHTML = '';
+            funcionarios.forEach(funcionario => {
+                const funcionarioElement = document.createElement('h4');
+                funcionarioElement.textContent = `Nome: ${funcionario.nome} / CPF: ${funcionario.CPF} / Telefone: ${funcionario.tel} /  Rua: ${funcionario.rua}
+                / Bairro: ${funcionario.bairro} / Nº: ${funcionario.Nu} / Descrição: ${funcionario.Des}
+                / Valor total: R$ ${funcionario.Var} / Valor da Entrada: R$ ${funcionario.Var1} / Data da compra: ${funcionario.Data1} / Data de vencimento: ${funcionario.Data2}. ASS:___________________________________________________________________________________________________________________
+                Agradecemos a preferencia. Minha Loja - CNPJ: 00.000.000/0001-00 - (não vale como nota fiscal).`;
+                Cliente.appendChild(funcionarioElement);
+            });
+            Array.from(Cliente.getElementsByTagName('h4'))
+                .sort((a, b) => a.textContent.localeCompare(b.textContent))
+                .forEach(li => Cliente.appendChild(li));
+            clientForm.reset();}
+            
+            document.addEventListener('DOMContentLoaded', function() {
+            Array.from(Cliente.getElementsByTagName('h4'))
+                .sort((a, b) => a.textContent.localeCompare(b.textContent))
+                .forEach(h4 => Cliente.appendChild(h4));});
+        window.onload = exibirFuncionarios;
+        
+        const searchInput = document.getElementById('searchInput');
+        const nameList = document.getElementById('nameList');
+        searchInput.addEventListener('input', function() {
+            const searchValue = searchInput.value.toLowerCase();
+            const names = nameList.getElementsByTagName('h4');
+            Array.from(names).forEach(function(name) {
+                const nameText = name.textContent.toLowerCase();
+                if (nameText.includes(searchValue)) {name.style.display = 'block';} 
+                else { name.style.display = 'none';} });});
+        document.addEventListener('DOMContentLoaded', function() {
+            const observacaoInput = document.getElementById('observacao');
+            observacaoInput.value = localStorage.getItem('observacao') || '';
+            observacaoInput.addEventListener('input', function() {
+                localStorage.setItem('observacao', observacaoInput.value);});});
+    </script>
+</body>
+</html>
